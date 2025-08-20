@@ -147,8 +147,32 @@ function isFullscreen() {
     return !!(document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
 }
 
+function isFullscreenSupported() {
+    return !!(document.documentElement.requestFullscreen || 
+              document.documentElement.webkitRequestFullscreen || 
+              document.documentElement.msRequestFullscreen);
+}
+
+function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 function updateFullscreenButton() {
     const btn = document.getElementById('fullscreen-btn');
+    
+    // Check if fullscreen is supported
+    if (!isFullscreenSupported()) {
+        if (isMobile()) {
+            btn.textContent = '📱 Add to Home Screen';
+            btn.setAttribute('aria-label', 'Add to home screen for fullscreen experience');
+            btn.title = 'For fullscreen mode: Add this page to your home screen';
+        } else {
+            btn.style.display = 'none'; // Hide on unsupported desktop browsers
+        }
+        return;
+    }
+    
+    // Normal fullscreen toggle
     if (isFullscreen()) {
         btn.textContent = '🚪 Exit Fullscreen';
         btn.setAttribute('aria-label', 'Exit fullscreen mode');
@@ -159,6 +183,14 @@ function updateFullscreenButton() {
 }
 
 function toggleFullscreen() {
+    // Check if fullscreen is supported
+    if (!isFullscreenSupported()) {
+        if (isMobile()) {
+            showMobileFullscreenInstructions();
+        }
+        return;
+    }
+    
     if (isFullscreen()) {
         // Exit fullscreen
         if (document.exitFullscreen) {
@@ -179,6 +211,34 @@ function toggleFullscreen() {
             elem.msRequestFullscreen().catch(() => {});
         }
     }
+}
+
+function showMobileFullscreenInstructions() {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
+    
+    let instructions = "For the best fullscreen experience:\n\n";
+    
+    if (isIOS) {
+        instructions += "📱 iOS Safari:\n";
+        instructions += "1. Tap the Share button (⬆️)\n";
+        instructions += "2. Select 'Add to Home Screen'\n";
+        instructions += "3. Open the app from your home screen\n\n";
+        instructions += "Or rotate to landscape mode for a better view.";
+    } else if (isAndroid) {
+        instructions += "📱 Android Chrome:\n";
+        instructions += "1. Tap the menu (⋮)\n";
+        instructions += "2. Select 'Add to Home screen'\n";
+        instructions += "3. Open the app from your home screen\n\n";
+        instructions += "Or try rotating to landscape mode.";
+    } else {
+        instructions += "📱 Mobile Browser:\n";
+        instructions += "1. Add this page to your home screen\n";
+        instructions += "2. Open from home screen for fullscreen mode\n\n";
+        instructions += "Or rotate to landscape for better viewing.";
+    }
+    
+    alert(instructions);
 }
 
 // Event listeners
