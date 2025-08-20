@@ -142,10 +142,25 @@ function showClue() {
     showScreen('clueDisplay');
 }
 
+// Fullscreen functionality
+function enterFullscreen() {
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen().catch(() => {});
+    } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen().catch(() => {});
+    } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen().catch(() => {});
+    }
+}
+
 // Event listeners
 elements.getWordBtn.addEventListener('click', startCountdown);
 elements.giveClueBtn.addEventListener('click', showClueInput);
 elements.showClueBtn.addEventListener('click', showClue);
+
+// Fullscreen button
+document.getElementById('fullscreen-btn').addEventListener('click', enterFullscreen);
 
 // Back button event listeners
 elements.backFromWord.addEventListener('click', () => showScreen('home'));
@@ -169,25 +184,61 @@ elements.clueInput.addEventListener('input', (e) => {
 
 // Mobile browser optimization
 function optimizeForMobile() {
-    // Hide address bar on mobile
-    if (window.navigator.standalone !== true) {
-        setTimeout(() => {
-            window.scrollTo(0, 1);
-        }, 100);
-    }
+    // More aggressive address bar hiding
+    const hideAddressBar = () => {
+        if (window.navigator.standalone !== true) {
+            // Multiple attempts to hide address bar
+            setTimeout(() => window.scrollTo(0, 1), 0);
+            setTimeout(() => window.scrollTo(0, 1), 100);
+            setTimeout(() => window.scrollTo(0, 1), 500);
+            setTimeout(() => window.scrollTo(0, 1), 1000);
+        }
+    };
     
     // Handle viewport changes (address bar hide/show)
     const handleViewportChange = () => {
         const vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
+        
+        // Force address bar to hide when viewport changes
+        hideAddressBar();
     };
+    
+    // Request fullscreen if supported
+    const requestFullscreen = () => {
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen().catch(() => {});
+        } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen().catch(() => {});
+        } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen().catch(() => {});
+        }
+    };
+    
+    // Add fullscreen button functionality
+    document.addEventListener('click', () => {
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+            requestFullscreen();
+        }
+    }, { once: true });
     
     window.addEventListener('resize', handleViewportChange);
     window.addEventListener('orientationchange', () => {
         setTimeout(handleViewportChange, 100);
+        setTimeout(hideAddressBar, 200);
     });
     
+    // Initial setup
     handleViewportChange();
+    hideAddressBar();
+    
+    // Hide address bar when scrolling stops
+    let scrollTimer;
+    window.addEventListener('scroll', () => {
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(hideAddressBar, 150);
+    });
 }
 
 // Prevent zoom on double tap
