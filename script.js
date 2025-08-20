@@ -154,7 +154,42 @@ elements.clueInput.addEventListener('input', (e) => {
     }
 });
 
+// Mobile browser optimization
+function optimizeForMobile() {
+    // Hide address bar on mobile
+    if (window.navigator.standalone !== true) {
+        setTimeout(() => {
+            window.scrollTo(0, 1);
+        }, 100);
+    }
+    
+    // Handle viewport changes (address bar hide/show)
+    const handleViewportChange = () => {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+    
+    window.addEventListener('resize', handleViewportChange);
+    window.addEventListener('orientationchange', () => {
+        setTimeout(handleViewportChange, 100);
+    });
+    
+    handleViewportChange();
+}
+
+// Prevent zoom on double tap
+document.addEventListener('touchend', (e) => {
+    const now = new Date().getTime();
+    if (now - lastTouchEnd <= 300) {
+        e.preventDefault();
+    }
+    lastTouchEnd = now;
+}, false);
+
+let lastTouchEnd = 0;
+
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
+    optimizeForMobile();
     showScreen('home');
 });

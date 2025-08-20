@@ -8,13 +8,27 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100); /* Dynamic viewport height for mobile */
     overflow: hidden;
+    margin: 0;
+    padding: 0;
+    /* Prevent pull-to-refresh and overscroll */
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+    /* Hide address bar on mobile */
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    height: calc(var(--vh, 1vh) * 100);
 }
 
 .container {
     width: 100vw;
     height: 100vh;
+    height: calc(var(--vh, 1vh) * 100); /* Dynamic viewport height for mobile */
     position: relative;
+    /* Ensure full coverage on mobile with notches */
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 .screen {
@@ -210,8 +224,68 @@ body {
     transform: translateX(-50%) translateY(-2px);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+/* Landscape Optimization */
+@media screen and (orientation: landscape) {
+    .screen {
+        justify-content: center;
+        align-items: center;
+        padding: 1rem 2rem;
+    }
+    
+    .game-title {
+        font-size: clamp(2.5rem, 6vh, 4rem);
+        margin-bottom: 0.5rem;
+    }
+    
+    .game-subtitle {
+        font-size: clamp(1rem, 2.5vh, 1.4rem);
+        margin-bottom: 2rem;
+    }
+    
+    .button-container {
+        flex-direction: row;
+        gap: 2rem;
+        max-width: 600px;
+    }
+    
+    .action-btn {
+        flex: 1;
+        padding: 1rem 1.5rem;
+        font-size: clamp(1rem, 2vh, 1.2rem);
+    }
+    
+    #countdown-number {
+        font-size: clamp(6rem, 15vh, 10rem);
+    }
+    
+    .countdown-display p {
+        font-size: clamp(1.2rem, 3vh, 2rem);
+    }
+    
+    #random-word,
+    #clue-text {
+        font-size: clamp(2rem, 8vh, 5rem);
+    }
+    
+    .clue-input-container h2 {
+        font-size: clamp(1.4rem, 3vh, 2rem);
+        margin-bottom: 1.5rem;
+    }
+    
+    #clue-input {
+        font-size: clamp(1rem, 2.5vh, 1.4rem);
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .button-group {
+        flex-direction: row;
+        gap: 1.5rem;
+    }
+}
+
+/* Portrait/Mobile Responsive Design */
+@media screen and (orientation: portrait) and (max-width: 768px) {
     .screen {
         padding: 1rem;
     }
@@ -226,5 +300,36 @@ body {
     
     .action-btn {
         padding: 1rem 1.5rem;
+    }
+}
+
+/* Very small screens */
+@media (max-height: 500px) and (orientation: landscape) {
+    .game-title {
+        font-size: clamp(2rem, 5vh, 3rem);
+        margin-bottom: 0.25rem;
+    }
+    
+    .game-subtitle {
+        font-size: clamp(0.9rem, 2vh, 1.2rem);
+        margin-bottom: 1rem;
+    }
+    
+    .button-container {
+        gap: 1rem;
+    }
+    
+    .action-btn {
+        padding: 0.75rem 1rem;
+        font-size: clamp(0.9rem, 1.8vh, 1.1rem);
+    }
+    
+    #countdown-number {
+        font-size: clamp(4rem, 12vh, 7rem);
+    }
+    
+    #random-word,
+    #clue-text {
+        font-size: clamp(1.5rem, 6vh, 3.5rem);
     }
 }
