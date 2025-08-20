@@ -164,7 +164,7 @@ body {
 
 #random-word,
 #clue-text {
-    font-size: 10rem;
+    font-size: 15rem;
     font-weight: 900;
     color: white;
     text-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
@@ -172,8 +172,8 @@ body {
     word-wrap: break-word;
     max-width: 95%;
     text-align: center;
-    /* Fallback for smaller screens */
-    font-size: min(10rem, 25vw, 25vh);
+    /* Try much larger viewport percentages */
+    font-size: min(15rem, 40vw, 35vh);
 }
 
 /* Clue Input Screen */
@@ -279,8 +279,8 @@ body {
     
     #random-word,
     #clue-text {
-        font-size: 8rem;
-        font-size: min(8rem, 20vw, 20vh);
+        font-size: 12rem;
+        font-size: min(12rem, 35vw, 30vh);
     }
     
     .clue-input-container h2 {
@@ -346,7 +346,7 @@ body {
     
     #random-word,
     #clue-text {
-        font-size: 6rem;
-        font-size: min(6rem, 18vw, 18vh);
+        font-size: 8rem;
+        font-size: min(8rem, 30vw, 25vh);
     }
 }

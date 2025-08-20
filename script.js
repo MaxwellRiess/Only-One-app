@@ -102,9 +102,14 @@ function showRandomWord() {
     // Debug font size
     setTimeout(() => {
         const computedStyle = window.getComputedStyle(elements.randomWord);
+        const vw25 = (window.innerWidth * 0.25);
+        const vh25 = (window.innerHeight * 0.25);
         console.log('Word font size:', computedStyle.fontSize);
         console.log('Viewport width:', window.innerWidth);
         console.log('Viewport height:', window.innerHeight);
+        console.log('25vw would be:', vw25 + 'px');
+        console.log('25vh would be:', vh25 + 'px');
+        console.log('10rem should be:', '160px (if 1rem = 16px)');
     }, 100);
 }
 
