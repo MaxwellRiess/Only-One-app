@@ -98,6 +98,14 @@ function showRandomWord() {
     const word = getRandomWord();
     elements.randomWord.textContent = word;
     showScreen('word');
+    
+    // Debug font size
+    setTimeout(() => {
+        const computedStyle = window.getComputedStyle(elements.randomWord);
+        console.log('Word font size:', computedStyle.fontSize);
+        console.log('Viewport width:', window.innerWidth);
+        console.log('Viewport height:', window.innerHeight);
+    }, 100);
 }
 
 // Show clue input screen
