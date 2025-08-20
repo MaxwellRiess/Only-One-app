@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Just ONE Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Home Screen -->
+        <div id="home-screen" class="screen active">
+            <h1 class="game-title">Just ONE</h1>
+            <p class="game-subtitle">Choose your action</p>
+            <div class="button-container">
+                <button id="get-word-btn" class="action-btn primary">Get a Word</button>
+                <button id="give-clue-btn" class="action-btn secondary">Give a Clue</button>
+            </div>
+        </div>
+
+        <!-- Countdown Screen -->
+        <div id="countdown-screen" class="screen">
+            <div class="countdown-display">
+                <div id="countdown-number">3</div>
+                <p>Get ready...</p>
+            </div>
+        </div>
+
+        <!-- Word Display Screen -->
+        <div id="word-screen" class="screen">
+            <div class="word-display">
+                <div id="random-word"></div>
+            </div>
+            <button id="back-from-word" class="back-btn">Back to Menu</button>
+        </div>
+
+        <!-- Clue Input Screen -->
+        <div id="clue-input-screen" class="screen">
+            <div class="clue-input-container">
+                <h2>Enter your clue</h2>
+                <input type="text" id="clue-input" placeholder="Type a single word..." maxlength="50">
+                <div class="button-group">
+                    <button id="show-clue-btn" class="action-btn primary">Show Clue</button>
+                    <button id="back-from-input" class="back-btn">Back</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clue Display Screen -->
+        <div id="clue-display-screen" class="screen">
+            <div class="clue-display">
+                <div id="clue-text"></div>
+            </div>
+            <button id="back-from-clue" class="back-btn">Back to Menu</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
