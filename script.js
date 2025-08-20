@@ -143,14 +143,41 @@ function showClue() {
 }
 
 // Fullscreen functionality
-function enterFullscreen() {
-    const elem = document.documentElement;
-    if (elem.requestFullscreen) {
-        elem.requestFullscreen().catch(() => {});
-    } else if (elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen().catch(() => {});
-    } else if (elem.msRequestFullscreen) {
-        elem.msRequestFullscreen().catch(() => {});
+function isFullscreen() {
+    return !!(document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+}
+
+function updateFullscreenButton() {
+    const btn = document.getElementById('fullscreen-btn');
+    if (isFullscreen()) {
+        btn.textContent = '🚪 Exit Fullscreen';
+        btn.setAttribute('aria-label', 'Exit fullscreen mode');
+    } else {
+        btn.textContent = '📱 Fullscreen Mode';
+        btn.setAttribute('aria-label', 'Enter fullscreen mode');
+    }
+}
+
+function toggleFullscreen() {
+    if (isFullscreen()) {
+        // Exit fullscreen
+        if (document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {});
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen().catch(() => {});
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen().catch(() => {});
+        }
+    } else {
+        // Enter fullscreen
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen().catch(() => {});
+        } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen().catch(() => {});
+        } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen().catch(() => {});
+        }
     }
 }
 
@@ -160,7 +187,7 @@ elements.giveClueBtn.addEventListener('click', showClueInput);
 elements.showClueBtn.addEventListener('click', showClue);
 
 // Fullscreen button
-document.getElementById('fullscreen-btn').addEventListener('click', enterFullscreen);
+document.getElementById('fullscreen-btn').addEventListener('click', toggleFullscreen);
 
 // Back button event listeners
 elements.backFromWord.addEventListener('click', () => showScreen('home'));
@@ -204,24 +231,7 @@ function optimizeForMobile() {
         hideAddressBar();
     };
     
-    // Request fullscreen if supported
-    const requestFullscreen = () => {
-        const elem = document.documentElement;
-        if (elem.requestFullscreen) {
-            elem.requestFullscreen().catch(() => {});
-        } else if (elem.webkitRequestFullscreen) {
-            elem.webkitRequestFullscreen().catch(() => {});
-        } else if (elem.msRequestFullscreen) {
-            elem.msRequestFullscreen().catch(() => {});
-        }
-    };
-    
-    // Add fullscreen button functionality
-    document.addEventListener('click', () => {
-        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-            requestFullscreen();
-        }
-    }, { once: true });
+    // Note: Fullscreen is now controlled by the toggle button
     
     window.addEventListener('resize', handleViewportChange);
     window.addEventListener('orientationchange', () => {
@@ -252,8 +262,15 @@ document.addEventListener('touchend', (e) => {
 
 let lastTouchEnd = 0;
 
+// Fullscreen event listeners
+document.addEventListener('fullscreenchange', updateFullscreenButton);
+document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+document.addEventListener('msfullscreenchange', updateFullscreenButton);
+
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
     optimizeForMobile();
     showScreen('home');
+    // Set initial button state
+    updateFullscreenButton();
 });
